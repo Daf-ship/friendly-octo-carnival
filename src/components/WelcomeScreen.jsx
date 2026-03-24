@@ -37,7 +37,7 @@ const WelcomeScreen = ({ onContinue }) => {
       }} transition={{
         duration: 0.6
       }} className="mb-12">
-          <img src="/AlgeriePoste.svg.png?v=1" alt="شعار بريد الجزائر" className="w-48 h-auto" />
+          <img src="/AlgeriePostesvg.png?v=1" alt="شعار بريد الجزائر" className="w-48 h-auto" />
         </motion.div>
 
         <motion.div initial={{
