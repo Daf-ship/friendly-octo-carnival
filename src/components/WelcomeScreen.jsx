@@ -37,7 +37,7 @@ const WelcomeScreen = ({ onContinue }) => {
       }} transition={{
         duration: 0.6
       }} className="mb-12">
-          <img src="https://horizons-cdn.hostinger.com/080c1bf2-e457-4c40-afe6-a9f683014aba/0411b23e4eba5edb373ef37d8f00a97e.png" alt="شعار بريد الجزائر" className="w-48 h-auto" />
+          <img src="/AlgeriePoste.svg.png" alt="شعار بريد الجزائر" className="w-48 h-auto" />
         </motion.div>
 
         <motion.div initial={{
