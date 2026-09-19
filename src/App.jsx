@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import WelcomeScreen from '@/components/WelcomeScreen';
 import PhoneNumberForm from '@/components/PhoneNumberForm';
@@ -9,6 +8,92 @@ import { Toaster } from '@/components/ui/toaster';
 function App() {
   const [currentScreen, setCurrentScreen] = useState('welcome');
   const [formEventId, setFormEventId] = useState(null);
+
+  // ==========================================
+  // PIXELS INITIALIZATION (Meta & TikTok)
+  // ==========================================
+  useEffect(() => {
+    // 1. FACEBOOK PIXEL INITIALIZATION
+    if (!window.fbq) {
+      !(function(f, b, e, v, n, t, s) {
+        if (f.fbq) return;
+        n = f.fbq = function() {
+          n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+        };
+        if (!f._fbq) f._fbq = n;
+        n.push = n;
+        n.loaded = !0;
+        n.version = '2.0';
+        n.queue = [];
+        t = b.createElement(e);
+        t.async = !0;
+        t.src = v;
+        s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s);
+      })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+
+      // Privacy hardening: Disable automatic SPA route tracking
+      window.fbq.disablePushState = true;
+
+      // Meta Pixel ID
+      window.fbq('init', '1178392937552985');
+    }
+    // Fire initial PageView for Facebook
+    window.fbq('track', 'PageView');
+
+    // 2. TIKTOK PIXEL INITIALIZATION
+    if (!window.ttq) {
+      !(function(w, d, t) {
+        w.TiktokAnalyticsObject = t;
+        var ttq = (w[t] = w[t] || []);
+        ttq.methods = [
+          'page',
+          'track',
+          'identify',
+          'instances',
+          'debug',
+          'on',
+          'off',
+          'once',
+          'ready',
+          'alias',
+          'group',
+          'enableCookie',
+          'disableCookie',
+        ];
+        ttq.setAndDefer = function(t, e) {
+          t[e] = function() {
+            t.push([e].concat(Array.prototype.slice.call(arguments, 0)));
+          };
+        };
+        for (var i = 0; i < ttq.methods.length; i++) ttq.setAndDefer(ttq, ttq.methods[i]);
+        ttq.instance = function(t) {
+          for (var e = ttq.methods[(i = 0)]; i < ttq.methods.length; i++)
+            ttq.setAndDefer(t, ttq.methods[i]);
+          return t;
+        };
+        ttq.load = function(e, n) {
+          var i = 'https://analytics.tiktok.com/i18n/pixel/events.js';
+          (ttq._i = ttq._i || {}),
+            (ttq._i[e] = []),
+            (ttq._i[e]._u = i),
+            (ttq._t = ttq._t || {}),
+            (ttq._t[e] = +new Date()),
+            (ttq._o = ttq._o || {}),
+            (ttq._o[e] = n || {});
+          var o = document.createElement('script');
+          (o.type = 'text/javascript'), (o.async = !0), (o.src = i + '?sdkid=' + e + '&lib=' + t);
+          var a = document.getElementsByTagName('script')[0];
+          a.parentNode.insertBefore(o, a);
+        };
+
+        // TikTok Pixel ID
+        ttq.load('D70SHCBC77UA3D4K6430');
+      })(window, document, 'ttq');
+    }
+    // Fire initial page view for TikTok
+    window.ttq.page();
+  }, []);
 
   const navigateToForm = () => {
     setCurrentScreen('form');
@@ -22,7 +107,7 @@ function App() {
   const navigateToWelcome = () => {
     setCurrentScreen('welcome');
     setFormEventId(null);
-  }
+  };
 
   return (
     <>
@@ -32,8 +117,15 @@ function App() {
       </Helmet>
       <div className="font-sans">
         {currentScreen === 'welcome' && <WelcomeScreen onContinue={navigateToForm} />}
-        {currentScreen === 'form' && <PhoneNumberForm onContinue={navigateToVerification} onTryAgain={navigateToWelcome} />}
-        {currentScreen === 'verification' && <VerificationScreen onOk={navigateToWelcome} eventId={formEventId} />}
+        {currentScreen === 'form' && (
+          <PhoneNumberForm
+            onContinue={navigateToVerification}
+            onTryAgain={navigateToWelcome}
+          />
+        )}
+        {currentScreen === 'verification' && (
+          <VerificationScreen onOk={navigateToWelcome} eventId={formEventId} />
+        )}
       </div>
       <Toaster />
     </>
